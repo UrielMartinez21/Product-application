@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+    <p>Price: {{ product.price }}</p>
+    <p>Description: {{ product.description }}</p>
+    <a href="{% url 'product:product_list' %}">Back to Product List</a>
+    <p>
+        <a href="{% url "product:product_share" product.id %}">Share this post</a>
+    </p>
+
+    <h2>Similar products</h2>
+    {% for product in similar_products %}
+        <p>
+            <a href="{{product.get_absolute_url}}">{{ product.name }}</a>
+        </p>
+    {% empty %}
+        <p>No similar products found.</p>
+    {% endfor %}
+
+    {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h2>
+    {% endwith %}
+
+    {% for comment in comments %}
+        <div>
+        <p>
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            {{ comment.created }}
+        </p>
+        {{ comment.body|linebreaks }}
+        </div>
+    {% empty %}
+        <p>There are no comments.</p>
+    {% endfor %}
+
+    {% include 'product/includes/comment_form.html' %}
+{% endblock %}

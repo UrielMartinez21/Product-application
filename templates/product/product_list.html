@@ -1,0 +1,30 @@
+{% extends "base.html"%}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+    <h1>Product List</h1>
+    {% if tag %}
+        <h2>Products tagged with "{{ tag.name }}"</h2>
+    {% endif %}
+    <ul>
+        {% for product in products %}
+            {%comment%}
+                <a href="{% url 'product:product_detail' product.id %}">
+            {% endcomment %}
+
+            <a href="{{ product.get_absolute_url }}">
+                <li>{{ product.name }} - {{ product.price }} - {{ product.country}}</li>
+            </a>
+            <p>Tags: 
+                {% for tag in product.tags.all %}
+                    <a href="{% url 'product:product_list_by_tag' tag.slug %}">
+                        {{ tag.name }}
+                    </a>
+                    {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endfor %}
+    </ul>
+    {% include "product/pagination.html" with page=products %}
+{% endblock %}
