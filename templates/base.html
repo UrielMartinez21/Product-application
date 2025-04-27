@@ -1,3 +1,4 @@
+{% load product_tags %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
+    <h2>i've written {% total_products%} products so far</h2>
     <div id="content">
         {% block content %}{% endblock %}
     </div>
