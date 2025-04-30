@@ -5,24 +5,40 @@
 
 {% block content %}
     <h2>Product List</h2>
+    <!-- First template tag -->
     <h3>I've written {% total_products%} products so far</h3>
+    <!-- First template tag -->
+
+    <!-- Second template tag -->
+    <h4>Latest products</h4>
+    {% show_latest_products %}
+    <br>
+    <!-- Second template tag -->
+
+    <!-- Third template tag -->
+    <h4>Most commented products</h4>
+    {% get_most_commented_products as most_commented_products %}
+    <ul>
+        {% for product in most_commented_products %}
+            <li>
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <!-- Third template tag -->
+
     {% if tag %}
         <h2>Products tagged with "{{ tag.name }}"</h2>
     {% endif %}
     <ul>
         {% for product in products %}
-            {%comment%}
-                <a href="{% url 'product:product_detail' product.id %}">
-            {% endcomment %}
-
             <a href="{{ product.get_absolute_url }}">
                 <li>{{ product.name }} - {{ product.price }} - {{ product.country}}</li>
             </a>
             <p>Tags: 
                 {% for tag in product.tags.all %}
-                    <a href="{% url 'product:product_list_by_tag' tag.slug %}">
-                        {{ tag.name }}
-                    </a>
+                    <a href="{% url 'product:product_list_by_tag' tag.slug %}">{{ tag.name }}</a>
                     {% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
