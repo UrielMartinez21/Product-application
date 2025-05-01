@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .feeds import LatestProductsFeed
 
 
 app_name = 'product'
@@ -20,4 +21,6 @@ urlpatterns = [
         views.product_comment,
         name='product_comment'
     ),
+    # Feeds
+    path('feeds/', LatestProductsFeed(), name='product_feed'),
 ]
