@@ -1,0 +1,7 @@
+docker exec -it product_db bash	-> Entrar a la Shell
+cat /var/lib/postgresql/data/pg_hba.conf	-> Revisar archivo .conf
+apt update && apt install nano			-> Instalar nano
+psql -U postgres		-> Entrar a la db
+
+---------------------------------
+docker run --name product_db_mysql -e MYSQL_DATABASE=product -e MYSQL_USER=product -e MYSQL_PASSWORD=12345 -e MYSQL_ROOT_PASSWORD=root123 -p 3306:3306 -d mysql:8.0 --default-authentication-plugin=mysql_native_password
