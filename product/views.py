@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from .forms import EmailProductFrom, CommentForm
+from .forms import EmailProductFrom, CommentForm, SearchForm
 from .models import Product
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
+from django.contrib.postgres.search import SearchVector
 
 # To class-based views:
 from django.views.generic import ListView
@@ -112,3 +113,28 @@ def product_comment(request, product_id):
         comment.save()
 
     return render(request, 'product/comment.html', {'product': product, 'form': form, 'comment': comment})
+
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = (
+                Post.published.annotate(
+                    search=SearchVector('name', 'description'),
+                )
+                .filter(search=query)
+            )
+    return render(
+        request,
+        'blog/post/search.html',
+        {
+            'form': form,
+            'query': query,
+            'results': results
+        }
+    )
